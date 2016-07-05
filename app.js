@@ -6,8 +6,28 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var passport = require('passport');
+var GoogleStrategy = require('passport-google-oauth20').Strategy;
+
 var routes = require('./routes/index');
+var auth = require('./routes/auth');
 var users = require('./routes/users');
+
+
+//passport setup
+passport.use(new GoogleStrategy({
+    clientID: config.get('authentication.googleStrategy.clientId'),
+    clientSecret: config.get('authentication.googleStrategy.clientSecret'),
+    callbackURL: config.get('authentication.googleStrategy.callbackURL')
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    logger('google', profile);
+    return cb(null, profile);
+    // User.findOrCreate({ googleId: profile.id }, function (err, user) {
+    //   return cb(err, user);
+    // });
+  }
+));
 
 var app = express();
 
@@ -22,8 +42,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize());
 
 app.use('/', routes);
+app.use('/auth', auth);
 app.use('/users', users);
 
 // catch 404 and forward to error handler
