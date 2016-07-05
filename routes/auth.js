@@ -5,7 +5,7 @@ var passport = require('passport');
 /* GET users listing. */
 router.get('/google',
   passport.authenticate('google', {
-    scope: 'https://www.googleapis.com/auth/userinfo.profile'
+    scope: 'profile email'
   }));
 
 router.get('/google/return',

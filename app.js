@@ -13,6 +13,7 @@ var routes = require('./routes/index');
 var auth = require('./routes/auth');
 var users = require('./routes/users');
 
+var User = require('./models/users');
 
 //passport setup
 passport.use(new GoogleStrategy({
@@ -21,11 +22,28 @@ passport.use(new GoogleStrategy({
     callbackURL: config.get('authentication.googleStrategy.callbackURL')
   },
   function(accessToken, refreshToken, profile, cb) {
-    logger('google', profile);
+    console.log('profile', profile);
+    //find the user
+    User.where({
+      firstName: profile.name.givenName,
+      lastName: profile.name.familyName
+    })
+      .fetch()
+      .then(function(user) {
+        //create the user if s/he does not exist
+        if(user === null) {
+          console.log('no user found', user);
+          new User({
+            firstName: profile.name.givenName,
+            lastName: profile.name.familyName,
+            email: profile.emails[0].value
+          }).save();
+        } else {
+          console.log('user found', user);
+        }
+
+      });
     return cb(null, profile);
-    // User.findOrCreate({ googleId: profile.id }, function (err, user) {
-    //   return cb(err, user);
-    // });
   }
 ));
 

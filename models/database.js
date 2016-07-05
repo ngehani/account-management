@@ -1,15 +1,7 @@
-// var pg = require('pg');
-// var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/hpe_account_management';
-//
-// var client = new pg.Client(connectionString);
-// client.connect();
-// var query = client.query('CREATE TABLE users(id SERIAL PRIMARY KEY, email VARCHAR(200) not null)');
-// query.on('end', function() { client.end(); });
-
 var config = require('config');
 var knex = require('knex')({
   client: 'pg',
   connection: config.get('db.url'),
   searchPath: 'knex,public'
 });
-var bookshelf = require('bookshelf')(knex);
+module.exports = require('bookshelf')(knex);
