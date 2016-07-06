@@ -1,17 +1,20 @@
 'use strict';
 
-var express = require('express');
-var router = express.Router();
-var User = require('../models/users');
+const express = require('express');
+const router = express.Router();
+const User = require('../models/users');
+const passport = require('passport');
 
 /* GET users listing. */
 router.route('/')
-  .get(function(req, res) {
-    User
-      .fetchAll()
-      .then(function(users) {
-        res.json(users);
-      })
+  .get(
+    passport.authenticate('jwt', { session: false}),
+    function(req, res) {
+      User
+        .fetchAll()
+        .then(function(users) {
+          res.json(users);
+        })
   });
 
 router.route('/:id')
