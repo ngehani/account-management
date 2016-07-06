@@ -10,6 +10,11 @@ Resources related to users
 ## User Collection [/api/users]
 
 ### List All Users [GET]
++ Request
+    + Headers
+
+        Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDIsImlhdCI6MTQ2NzgzMzUzNywiZXhwIjoxNDY3ODY5NTM3fQ.9F7Bk0QND5YveEXfyv_X18IwkxskUnAOHJ-BE6uXmd4
+
 + Response 200 (application/json; charset=utf-8)
 
         [
@@ -26,7 +31,20 @@ Resources related to users
                 "isSuperuser": false
             }
         ]
+        
++ Request
+    + Headers
 
+
++ Response 401
+    + Headers
+        
+        connection:close
+        content-length:12
+        
+    + Body
+        
+        Unauthorized
 
 ## User [/api/users/{id}]
 
