@@ -48,3 +48,4 @@ fabric.properties
 node_modules
 app/jspm_packages
 npm-debug.log
+.idea
