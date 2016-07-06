@@ -1,4 +1,5 @@
 {
+  "secret": "No more secrets.",
   "authentication": {
     "googleStrategy": {
       "clientId": "632505077105-r5u4sst6flni4k6a6sud8gb4g9tf0r58.apps.googleusercontent.com",

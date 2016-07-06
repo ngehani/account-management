@@ -1,6 +1,10 @@
-var express = require('express');
-var router = express.Router();
-var passport = require('passport');
+'use strict';
+
+const express = require('express');
+const router = express.Router();
+const passport = require('passport');
+const jwt = require('jsonwebtoken');
+const config = require('config');
 
 /* GET users listing. */
 router.get('/google',
@@ -14,7 +18,11 @@ router.get('/google/return',
     failureRedirect: '/login'
   }),
   function(req, res) {
-    res.redirect('/');
+    let user = req.user;
+    let token = jwt.sign({id: user.id}, config.get('secret'), {
+      expiresIn: '10h'
+    });
+    res.json({ success: true, token: 'JWT ' + token });
   });
 
 module.exports = router;

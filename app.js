@@ -10,6 +10,8 @@ var bodyParser = require('body-parser');
 
 var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
+var JwtStrategy = require('passport-jwt').Strategy;
+var ExtractJwt = require('passport-jwt').ExtractJwt;
 
 var routes = require('./routes/index');
 var auth = require('./routes/auth');
@@ -23,31 +25,52 @@ passport.use(new GoogleStrategy({
     clientSecret: config.get('authentication.googleStrategy.clientSecret'),
     callbackURL: config.get('authentication.googleStrategy.callbackURL')
   },
-  function(accessToken, refreshToken, profile, cb) {
-    console.log('profile', profile);
+  function(accessToken, refreshToken, profile, done) {
     //find the user
-    User.where({
-      firstName: profile.name.givenName,
-      lastName: profile.name.familyName
-    })
+    User
+      .where({
+        firstName: profile.name.givenName,
+        lastName: profile.name.familyName
+      })
       .fetch()
       .then(function(user) {
         //create the user if s/he does not exist
         if(user === null) {
-          console.log('no user found', user);
+          // console.log('no user found', user);
           new User({
             firstName: profile.name.givenName,
             lastName: profile.name.familyName,
             email: profile.emails[0].value
-          }).save();
+          }).save().then(function(newUser) {
+            return done(null, newUser);
+          });
         } else {
-          console.log('user found', user);
+          // console.log('user found', user);
+          return done(null, user);
         }
-
+      })
+      .catch(function() {
+        return done(null);
       });
-    return cb(null, profile);
   }
 ));
+
+passport.use(new JwtStrategy({
+    jwtFromRequest: ExtractJwt.fromAuthHeader(),
+    secretOrKey: config.get('secret'),
+    // issuer: 'localhost',
+    // audience: 'localhost'
+  }, function(jwt_payload, done) {
+    console.info('jwt', jwt_payload);
+    User
+      .where({id: jwt_payload.id})
+      .fetch()
+      .then(function(user) {
+      done(null, user);
+    }).catch(function(err) {
+      done(err, null);
+    })
+  }));
 
 var app = express();
 
