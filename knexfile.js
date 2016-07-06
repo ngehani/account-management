@@ -2,6 +2,21 @@
 var config = require('config');
 module.exports = {
 
+  test: {
+    client: 'postgresql',
+    connection: {
+      database: 'hpe_account_management_test',
+      // user:     'username',
+      // password: 'password'
+    },
+    migrations: {
+      tableName: 'knex_migrations'
+    },
+    seeds: {
+      directory: './test/seeds/test'
+    }
+  },
+
   development: {
     client: 'postgresql',
     connection: {
@@ -15,6 +30,9 @@ module.exports = {
     },
     migrations: {
       tableName: 'knex_migrations'
+    },
+    seeds: {
+      directory: './test/seeds/test'
     }
   },
 
