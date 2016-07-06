@@ -1,0 +1,50 @@
+FORMAT: 1A
+
+# HPE Account Management API
+The HPE Account Management API
+
+# Group Users
+
+Resources related to users
+
+## User Collection [/api/users]
+
+### List All Users [GET]
++ Response 200 (application/json; charset=utf-8)
+
+        [
+            {
+                "id": 42,
+                "firstName": "Richard",
+                "lastName": "Plotkin",
+                "isSuperuser": false
+            },
+            {
+                "id": 1010,
+                "firstName": "Alexei",
+                "lastName": "Ledenev",
+                "isSuperuser": false
+            }
+        ]
+
+
+## User [/api/users/{id}]
+
+A single user.
+
++ Parameters
+    + id: 42 (required, string) - ID of the User
+
+### Retrieve a Single User [GET]
++ Response 200 (application/json; charset=utf-8)
+
+        {
+            "id": 42,
+            "firstName": "Richard",
+            "lastName": "Plotkin",
+            "isSuperuser": false,
+            "emails": [
+                "richard.plotkin@toptal.com",
+                "richardjplotkin@gmail.com"
+            ]
+        }
