@@ -50,7 +50,7 @@ passport.use(new GoogleStrategy({
         }
       })
       .catch(function() {
-        return done(null);
+        return done(null, false);
       });
   }
 ));

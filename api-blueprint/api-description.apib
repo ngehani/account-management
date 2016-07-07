@@ -13,7 +13,7 @@ Resources related to users
 + Request
     + Headers
 
-        Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDIsImlhdCI6MTQ2NzgzMzUzNywiZXhwIjoxNDY3ODY5NTM3fQ.9F7Bk0QND5YveEXfyv_X18IwkxskUnAOHJ-BE6uXmd4
+            Authorization: Superuser
 
 + Response 200 (application/json; charset=utf-8)
 
@@ -35,16 +35,11 @@ Resources related to users
 + Request
     + Headers
 
+            Authorization: None
 
-+ Response 401
-    + Headers
-        
-        connection:close
-        content-length:12
-        
-    + Body
-        
-        Unauthorized
++ Response 401 (application/json; charset=utf-8)
+
+            {"message": "Unauthorized"}
 
 ## User [/api/users/{id}]
 

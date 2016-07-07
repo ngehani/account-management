@@ -6,15 +6,33 @@ const User = require('../models/users');
 const passport = require('passport');
 
 /* GET users listing. */
+// router.route('/')
+//   .get(
+//     passport.authenticate('jwt', { session: false}),
+//     function(req, res) {
+//       User
+//         .fetchAll()
+//         .then(function(users) {
+//           res.json(users);
+//         })
+//   });
+
 router.route('/')
-  .get(
-    passport.authenticate('jwt', { session: false}),
-    function(req, res) {
+  .get(function(req, res, next) {
+    passport.authenticate('jwt', function(err, user, info) {
+      if (err) {
+        res.status(401).json({message: 'Unauthorized'});
+        return next(err);
+      }
+      if (!user) {
+        res.status(401).json({message: 'Unauthorized'});
+      }
       User
         .fetchAll()
         .then(function(users) {
           res.json(users);
         })
+    })(req, res, next)
   });
 
 router.route('/:id')
